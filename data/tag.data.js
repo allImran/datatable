@@ -1,0 +1,1 @@
+export const tags = ['Male', 'London', '27-40 Yrs', 'Islam', 'Pakistani']
