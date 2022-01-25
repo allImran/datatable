@@ -1,32 +1,22 @@
 <template>
-    <div class="container p-20 mx-auto bg-blue-200 h-screen overflow-y-auto">
-        <p class="uppercase text-blue-500 text-5xl text-center mb-10">workspacify</p>
-        <div class="grid gap-3 grid-cols-6 p-10 bg-white rounded-3xl">
-            <div>
-
-            </div>
-            <div class="border-2 border-gray-200 col-span-3">
-                <div>
-                    <svg height="160" width="160" viewBox="0 0 160 160">
-                    <g v-for="(value, index) in initialValues" :key="index">
-                        <circle 
-                            :cx="cx"
-                            :cy="cy"
-                            :r="radius"
-                            fill="transparent"
-                            :stroke="colors[index]" 
-                            :stroke-width="strokeWidth"
-                            :stroke-dasharray="circumference"
-                            :stroke-dashoffset="calculateStrokeDashOffset(value, circumference)"
-                            :transform="returnCircleTransformValue(index)"
-                        ></circle>
-                    <text></text>
-                    </g>
-                </svg>
-                </div>
-            </div>
-            <div class="border-2 border-gray-200 col-span-2"></div>
-        </div>
+    <div class="relative">
+        <svg  height="160" width="160" viewBox="0 0 160 160">
+            <g v-for="(item, index) in items" :key="index">
+                <circle 
+                    :cx="cx"
+                    :cy="cy"
+                    :r="radius"
+                    fill="transparent"
+                    :stroke="colors[index]" 
+                    :stroke-width="strokeWidth"
+                    :stroke-dasharray="circumference"
+                    :stroke-dashoffset="calculateStrokeDashOffset(item, circumference)"
+                    :transform="returnCircleTransformValue(index)"
+                ></circle>
+            <text></text>
+            </g>
+        </svg>
+        <p class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ dataTotal }}</p>
     </div>
 </template>
 
@@ -40,35 +30,28 @@ export default {
     },
     data() {
         return {
+            render: false,
             angleOffset: -90,
             chartData: [],
-            colors: ["#6495ED", "goldenrod", "#cd5c5c", "thistle", "lightgray"],
+            colors: ["#78c1ff", "#5099f4", "#2871cc", "#003f9a", "#468fea", "#78c1ff", "#5099f4", "#2871cc", "#003f9a", "#468fea" ],
             cx: 80,
             cy: 80,                      
             radius: 60,
             sortedValues: [],
-            strokeWidth: 30,    
+            strokeWidth: 20,    
         }
     },
     computed: {
+        items() {
+            let itemArr = this.initialValues.map(i => i.value);
+            return itemArr.sort((a,b) => b-a)
+        },
         circumference() {
             return 2 * Math.PI * this.radius
         },
-        sortInitialValues() {
-            return this.sortedValues = this.initialValues.sort((a,b) => b-a)
-        },
-        calculateChartData() {
-            this.chartData = [];
-            this.sortedValues.forEach((dataVal, index) => {
-                const data = {
-                    degrees: this.angleOffset,
-                }
-                this.chartData.push(data)
-                this.angleOffset = this.dataPercentage(dataVal) * 360 + this.angleOffset
-            })
-        },
+        
         dataTotal() {
-            return this.sortedValues.reduce((acc, val) => acc + val)
+            return this.items.reduce((acc, val) => acc + val)
         },
     },
     methods: {
@@ -83,19 +66,28 @@ export default {
             return `rotate(${this.chartData[index].degrees}, ${this.cx}, ${this.cy})`
             
         },  
+        calculateChartData() {
+            this.chartData = [];
+            this.items.forEach((dataVal) => {
+                const data = {
+                    degrees: this.angleOffset,
+                }
+                this.chartData.push(data)
+                this.angleOffset = this.dataPercentage(dataVal) * 360 + this.angleOffset
+            })
+        },
     },
 
     created() {
-        this.sortInitialValues
-        this.calculateChartData
+        this.calculateChartData()
     }
 }
 </script>
 <style scoped>
 
 svg {
-  height: 200px;
-  width: 200px;
+  height: 250px;
+  width: 250px;
 }
 text {
   fill: #333;

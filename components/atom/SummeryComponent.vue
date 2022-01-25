@@ -1,14 +1,14 @@
 <template>
-    <div class="border-2 border-gray-200">
+    <div style="height: calc(50% - 6px)" class="border-2 border-gray-200">
         <div class="border-b border-gray-200 py-2">
             <p class="capitalize text-center">{{ title }}</p>
         </div>
-        <div class="flex justify-center items-center space-y-3">
+        <div style="height: calc(100% - 50px)" class="flex justify-center items-center space-x-2 py-2">
             <i 
-                class="mdi"
+                class="mdi text-4xl"
                 :class="icon"
             ></i>
-            <p>{{ value }}</p>
+            <p class="text-3xl">{{ value }}</p>
         </div>
     </div>
 </template>
@@ -16,6 +16,7 @@
 <script>
 export default {
     name: 'SummeryCard',
+    
     props: {
         value: {
             default: 5
@@ -24,7 +25,7 @@ export default {
             default: 'Sales'
         },
         icon: {
-            default : 'account'
+            default : 'mdi-account'
         }
     }
 }
